@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)file:///Users/zhaomengxiang/Downloads/%E9%98%B6%E8%B7%83/love-site/index.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💕 致 杨慧敏</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;background:#0a0a1a;color:#fff;overflow-x:hidden;min-height:100vh}
+::selection{background:rgba(255,105,135,.4);color:#fff}
+
+/* ===== CANVAS ===== */
+#heartCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#fireworkCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:5;pointer-events:none}
+
+/* ===== LOADING / INTRO ===== */
+.intro-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;background:#0a0a1a;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1s,visibility 1s;cursor:pointer}
+.intro-overlay.hidden{opacity:0;visibility:hidden}
+.intro-heart{font-size:80px;animation:heartPulse 1s infinite}
+.intro-text{margin-top:24px;font-size:18px;color:rgba(255,255,255,.6);letter-spacing:4px;animation:fadeInOut 2s infinite}
+.intro-hint{margin-top:40px;font-size:13px;color:rgba(255,255,255,.3);letter-spacing:2px}
+@keyframes heartPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes fadeInOut{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ===== PAGE ===== */
+.page{position:relative;z-index:2;opacity:0;transition:opacity 1.5s}
+.page.show{opacity:1}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative}
+.hero-heart-bg{position:absolute;width:320px;height:320px;opacity:.06;animation:floatHeart 6s ease-in-out infinite}
+@keyframes floatHeart{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}}
+.hero h1{font-size:clamp(36px,8vw,64px);font-weight:800;margin-bottom:8px;opacity:0;animation:none}
+.hero h1.animate{animation:typeReveal 1.5s 0.5s forwards}
+.hero .name{display:inline-block;background:linear-gradient(135deg,#ff6b9d,#c850c0,#ff6b9d);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientShift 3s ease infinite}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes typeReveal{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero .subtitle{font-size:clamp(16px,3vw,22px);color:rgba(255,255,255,.5);margin-top:12px;opacity:0}
+.hero .subtitle.animate{animation:typeReveal 1.2s 1.2s forwards}
+.scroll-hint{position:absolute;bottom:40px;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:typeReveal 1s 2.5s forwards}
+.scroll-hint span{font-size:12px;color:rgba(255,255,255,.3);letter-spacing:2px}
+.scroll-arrow{width:20px;height:20px;border-right:2px solid rgba(255,255,255,.3);border-bottom:2px solid rgba(255,255,255,.3);transform:rotate(45deg);animation:scrollBounce 2s infinite}
+@keyframes scrollBounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(8px)}}
+
+/* ===== SECTIONS ===== */
+.section{padding:100px 20px;max-width:800px;margin:0 auto}
+.section-title{text-align:center;margin-bottom:60px}
+.section-title h2{font-size:clamp(28px,5vw,42px);font-weight:700;margin-bottom:8px}
+.section-title .line{width:60px;height:3px;background:linear-gradient(90deg,#ff6b9d,#c850c0);border-radius:2px;margin:16px auto 0}
+
+/* ===== LOVE LETTER ===== */
+.letter{background:rgba(255,255,255,.03);border:1px solid rgba(255,105,157,.1);border-radius:24px;padding:48px 40px;position:relative;overflow:hidden}
+.letter::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(255,105,157,.03),transparent,rgba(200,80,192,.03),transparent);animation:letterGlow 8s linear infinite}
+@keyframes letterGlow{to{transform:rotate(360deg)}}
+.letter-content{position:relative;z-index:1}
+.letter p{font-size:16px;line-height:2.2;color:rgba(255,255,255,.75);margin-bottom:20px;text-indent:2em}
+.letter p:last-child{margin-bottom:0}
+.letter .highlight{color:#ff6b9d;font-weight:600}
+.letter .signature{text-align:right;margin-top:32px;font-size:15px;color:rgba(255,255,255,.4);font-style:italic}
+
+/* ===== TIMELINE ===== */
+.moments{display:flex;flex-direction:column;gap:40px}
+.moment{display:flex;gap:24px;align-items:flex-start;opacity:0;transform:translateX(-30px);transition:all .8s}
+.moment.visible{opacity:1;transform:translateX(0)}
+.moment-icon{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,rgba(255,105,157,.15),rgba(200,80,192,.15));border:1px solid rgba(255,105,157,.2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.moment-content h3{font-size:18px;font-weight:700;color:#ff6b9d;margin-bottom:6px}
+.moment-content p{font-size:14.5px;color:rgba(255,255,255,.6);line-height:1.9}
+
+/* ===== PROMISE CARDS ===== */
+.promises{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.promise-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,105,157,.08);border-radius:20px;padding:32px 24px;text-align:center;transition:all .5s;cursor:default}
+.promise-card:hover{transform:translateY(-8px);border-color:rgba(255,105,157,.3);box-shadow:0 20px 40px rgba(255,105,157,.1)}
+.promise-card .icon{font-size:36px;margin-bottom:14px;display:block}
+.promise-card h3{font-size:15px;font-weight:700;color:var(--text-white,#f8fafc);margin-bottom:8px}
+.promise-card p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.8}
+
+/* ===== FINAL CTA ===== */
+.final{text-align:center;padding:120px 20px 80px;max-width:600px;margin:0 auto}
+.final h2{font-size:clamp(32px,6vw,52px);font-weight:800;margin-bottom:16px}
+.final h2 .heart-text{color:#ff6b9d;display:inline-block;animation:heartPulse 1.2s infinite}
+.final p{font-size:16px;color:rgba(255,255,255,.5);margin-bottom:40px;line-height:1.9}
+.yes-btn{display:inline-block;padding:18px 64px;background:linear-gradient(135deg,#ff6b9d,#c850c0);color:#fff;border:none;border-radius:60px;font-size:18px;font-weight:700;letter-spacing:4px;cursor:pointer;transition:all .4s;box-shadow:0 8px 30px rgba(255,105,157,.3);position:relative;overflow:hidden}
+.yes-btn:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(255,105,157,.5)}
+.yes-btn::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.15),transparent);transform:rotate(45deg);transition:all .6s}
+.yes-btn:hover::after{left:100%}
+.yes-response{margin-top:40px;font-size:20px;color:#ff6b9d;opacity:0;transform:translateY(20px);transition:all .8s}
+.yes-response.show{opacity:1;transform:translateY(0)}
+
+/* ===== FLOATING HEARTS ===== */
+.floating-hearts{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:4;overflow:hidden}
+.float-heart{position:absolute;bottom:-60px;font-size:20px;opacity:0;animation:floatUp linear forwards}
+@keyframes floatUp{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:0}
+  10%{opacity:.7}
+  90%{opacity:.7}
+  100%{transform:translateY(-110vh) rotate(720deg) scale(0);opacity:0}
+}
+
+/* ===== MUSIC BTN ===== */
+.music-btn{position:fixed;top:20px;right:20px;z-index:200;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,105,157,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all .3s}
+.music-btn:hover{background:rgba(255,105,157,.15);border-color:rgba(255,105,157,.4)}
+.music-btn.playing{animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== REVEAL ===== */
+.reveal{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.4,0,.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  .letter{padding:32px 24px}
+  .promises{grid-template-columns:1fr 1fr}
+  .moment{gap:16px}
+}
+@media(max-width:400px){
+  .promises{grid-template-columns:1fr}
+}
+</style>
+<style>.Po4BvhR1CK2tJaywJ6AN path {
+  fill: var(--icon-path-fill);
+}
+.Oz4yDjua3Qe6thqkZYf_ path {
+  transition: 0.2s all;
+}
+.Oz4yDjua3Qe6thqkZYf_:hover path {
+  fill: var(--icon-hover-fill);
+}
+</style><style>/* ！！！切勿直接改动该文件，该文件由 generator.ts 自动生成！！！ */
+/* !!! DONT MODIFY THIS FILE DIRECTLY, THIS FILE IS GENERATED BY generator.ts AUTOMATICALLY !!! */
+.ibW4Oa5B7s2zJKKZ4pCg {
+  user-select: none;
+}
+.AtqKyJetjrG4smuk35Np {
+  max-width: 346px;
+  width: auto;
+  height: 36px;
+  background-color: var(--quark-style-white-color, #fff);
+  padding-left: 10px;
+  padding-right: 4px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  border: 1px solid var(--quark-style-gray-20-color, rgba(6, 10, 38, 0.12));
+  box-shadow: 0 12px 32px -6px var(--quark-style-gray-30-fixed-color, rgba(6, 10, 38, 0.24));
+  border-radius: 10px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .g6iGsZa_KHMeW2yICzQQ {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .e4UXx38MPgfHdym_Lzt0 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 28px;
+  padding: 0 6px;
+  margin-right: 2px;
+  border-radius: 6px;
+  column-gap: 4px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .e4UXx38MPgfHdym_Lzt0:hover:not(.ibW4Oa5B7s2zJKKZ4pCg .kNOcXLDT_cCrcoY8LTm8) {
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ibW4Oa5B7s2zJKKZ4pCg .kNOcXLDT_cCrcoY8LTm8 {
+  cursor: default;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .kNOcXLDT_cCrcoY8LTm8 .Va3czASiR9Zztyl_lD4M {
+  color: var(--quark-style-gray-40-color, rgba(6, 10, 38, 0.4)) !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .e4UXx38MPgfHdym_Lzt0 .Va3czASiR9Zztyl_lD4M {
+  font-size: 12px;
+  color: var(--quark-style-gray-color, #060A26);
+  line-height: 16px;
+  white-space: nowrap;
+  position: relative;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .llw0qsmiI_08u93bFdNg {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  overflow: visible !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .LEo8kpqIERehkv8AhAfG {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 6px;
+  overflow: visible !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .LEo8kpqIERehkv8AhAfG:hover {
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ibW4Oa5B7s2zJKKZ4pCg .zoNmooxAnbLEJSN8m1Jg {
+  box-sizing: border-box;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 110px;
+  max-height: 136px;
+  height: auto;
+  top: 36px;
+  right: -5px;
+  padding: 4px 0;
+  background-color: var(--quark-style-white-color, #fff);
+  border: 1px solid var(--quark-style-gray-20-color, rgba(6, 10, 38, 0.12));
+  box-shadow: 0 4px 16px -6px var(--quark-style-gray-20-fixed-color, rgba(6, 10, 38, 0.12));
+  border-radius: 8px;
+  overflow: visible !important;
+  row-gap: 4px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .O1imPofna4elG_8NcQnR {
+  top: -77px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .mdH0IY7jS3Swn5vdX6tz {
+  width: 102px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  column-gap: 8px;
+  border-radius: 6px;
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .mdH0IY7jS3Swn5vdX6tz:hover:not(.ibW4Oa5B7s2zJKKZ4pCg .dEdHLVmn_L2GAzb_cmwt) {
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ibW4Oa5B7s2zJKKZ4pCg .dEdHLVmn_L2GAzb_cmwt {
+  cursor: default;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .dEdHLVmn_L2GAzb_cmwt .zEraruudgjR2MToGu4Kw {
+  color: var(--quark-style-gray-40-color, rgba(6, 10, 38, 0.4)) !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .XfCMwvO0DsqFCeyzPYP2 {
+  width: 16px;
+  height: 16px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .zEraruudgjR2MToGu4Kw {
+  font-size: 12px;
+  color: var(--quark-style-gray-color, #060A26);
+}
+.ibW4Oa5B7s2zJKKZ4pCg .KZeoAuXbMIkWzOT4PcH5 {
+  width: 100%;
+  height: 1px;
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ZL32C_XdLL8UQRZ3zObd {
+  display: flex;
+  align-items: center;
+}
+.u5llx7cIQZLdrjP5Vag1 {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  cursor: pointer;
+  margin-right: 12px;
+  background: var(--quark-style-gray-60-color, rgba(6, 10, 38, 0.6));
+}
+.ZL32C_XdLL8UQRZ3zObd .LEo8kpqIERehkv8AhAfG {
+  border-radius: 16px !important;
+  background: var(--quark-style-gray-60-color, rgba(6, 10, 38, 0.6)) !important;
+}
+.ZL32C_XdLL8UQRZ3zObd .zoNmooxAnbLEJSN8m1Jg {
+  right: 0 !important;
+}
+.ZL32C_XdLL8UQRZ3zObd {
+  overflow: visible !important;
+}
+</style></head>
+<body>
+
+<canvas id="heartCanvas" width="1280" height="681"></canvas>
+<canvas id="fireworkCanvas" width="1280" height="681"></canvas>
+
+<!-- Floating Hearts -->
+<div class="floating-hearts" id="floatingHearts"><span class="float-heart" style="left: 44.351%; font-size: 14.5582px; animation-duration: 7.59212s; animation-delay: 1.90124s;">💗</span><span class="float-heart" style="left: 50.4159%; font-size: 13.9664px; animation-duration: 10.0784s; animation-delay: 1.22218s;">✨</span><span class="float-heart" style="left: 34.5919%; font-size: 20.7744px; animation-duration: 9.92546s; animation-delay: 0.130958s;">💗</span><span class="float-heart" style="left: 46.3236%; font-size: 26.62px; animation-duration: 11.9408s; animation-delay: 1.32722s;">❤️</span><span class="float-heart" style="left: 50.5248%; font-size: 19.077px; animation-duration: 6.35444s; animation-delay: 1.95305s;">🩷</span><span class="float-heart" style="left: 64.5873%; font-size: 12.1665px; animation-duration: 11.7884s; animation-delay: 0.597983s;">💘</span><span class="float-heart" style="left: 57.3761%; font-size: 18.4451px; animation-duration: 6.79936s; animation-delay: 1.71078s;">💗</span><span class="float-heart" style="left: 73.8029%; font-size: 15.5886px; animation-duration: 7.70794s; animation-delay: 0.0175561s;">💕</span><span class="float-heart" style="left: 48.6523%; font-size: 15.3712px; animation-duration: 8.6118s; animation-delay: 0.590922s;">💕</span><span class="float-heart" style="left: 49.9238%; font-size: 22.6885px; animation-duration: 10.4811s; animation-delay: 1.81631s;">🌸</span><span class="float-heart" style="left: 97.7363%; font-size: 27.1467px; animation-duration: 9.97738s; animation-delay: 0.494253s;">🤍</span><span class="float-heart" style="left: 30.2975%; font-size: 17.8721px; animation-duration: 11.6693s; animation-delay: 1.59378s;">💘</span><span class="float-heart" style="left: 78.1472%; font-size: 25.4558px; animation-duration: 6.89747s; animation-delay: 1.58736s;">💗</span><span class="float-heart" style="left: 68.5364%; font-size: 13.5025px; animation-duration: 9.58015s; animation-delay: 0.63566s;">💖</span><span class="float-heart" style="left: 98.7772%; font-size: 21.909px; animation-duration: 11.1384s; animation-delay: 0.0653353s;">❤️</span><span class="float-heart" style="left: 69.6169%; font-size: 19.9892px; animation-duration: 10.0863s; animation-delay: 1.2788s;">✨</span><span class="float-heart" style="left: 18.2015%; font-size: 16.1534px; animation-duration: 6.38836s; animation-delay: 1.1187s;">🌸</span></div>
+
+<!-- Music Button -->
+<div class="music-btn" id="musicBtn" title="背景音乐">🎵</div>
+
+<!-- ===== INTRO OVERLAY ===== -->
+<div class="intro-overlay hidden" id="introOverlay">
+  <div class="intro-heart">💗</div>
+  <div class="intro-text">致 · 杨慧敏</div>
+  <div class="intro-hint">— 点击任意处开启 —</div>
+</div>
+
+<!-- ===== MAIN PAGE ===== -->
+<div class="page show" id="mainPage">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-heart-bg">
+      <svg viewBox="0 0 512 512" fill="rgba(255,105,157,.3)"><path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path></svg>
+    </div>
+    <h1 id="heroTitle" class="animate">致 <span class="name">杨慧敏</span></h1>
+    <p class="subtitle animate" id="heroSubtitle">在这个浩瀚的宇宙里，遇见你是我最大的幸运</p>
+    <div class="scroll-hint">
+      <span>向下滑动</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- LOVE LETTER -->
+  <section class="section">
+    <div class="section-title reveal visible">
+      <h2>💌 写给你的信</h2>
+      <div class="line"></div>
+    </div>
+    <div class="letter reveal visible">
+      <div class="letter-content">
+        <p>亲爱的 <span class="highlight">慧敏</span>：</p>
+        <p>不知道从什么时候开始，你的名字变成了我心里最柔软的角落。每次想到你，嘴角都会不自觉地上扬，好像全世界的甜都汇聚在了那一刻。</p>
+        <p>我喜欢你笑起来的样子，像是春天里最温暖的阳光，能融化掉所有的阴霾。我喜欢和你在一起的每一秒，哪怕只是安静地待着，都觉得时间过得刚刚好。</p>
+        <p>也许我不是最会说甜言蜜语的人，但我想用最真诚的心告诉你：<span class="highlight">在我眼里，你就是独一无二的存在。</span></p>
+        <p>我想牵着你的手，走过春夏秋冬，看遍日出日落。我想在你开心的时候陪你笑，在你难过的时候给你一个温暖的拥抱。我想成为你最坚实的依靠，也想成为你最温柔的港湾。</p>
+        <p>所以，<span class="highlight">杨慧敏</span>，你愿意给我一个机会，让我好好守护你吗？</p>
+        <div class="signature">—— 一个满心欢喜的人</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOMENTS -->
+  <section class="section">
+    <div class="section-title reveal visible">
+      <h2>✨ 想和你一起</h2>
+      <div class="line"></div>
+    </div>
+    <div class="moments">
+      <div class="moment visible">
+        <div class="moment-icon">🌅</div>
+        <div class="moment-content">
+          <h3>一起看日出</h3>
+          <p>在某个清晨，牵着你的手爬上山顶，看第一缕阳光洒在你脸上，那一定比日出本身更美。</p>
+        </div>
+      </div>
+      <div class="moment visible">
+        <div class="moment-icon">🎡</div>
+        <div class="moment-content">
+          <h3>一起去游乐园</h3>
+          <p>坐在摩天轮的最高处，整个城市在脚下闪烁，而我只想看着你的眼睛说一句：我好喜欢你。</p>
+        </div>
+      </div>
+      <div class="moment visible">
+        <div class="moment-icon">🍜</div>
+        <div class="moment-content">
+          <h3>一起吃遍美食</h3>
+          <p>不管是街边的小摊还是精致的餐厅，只要和你在一起，每一口都是幸福的味道。</p>
+        </div>
+      </div>
+      <div class="moment visible">
+        <div class="moment-icon">🌧️</div>
+        <div class="moment-content">
+          <h3>一起淋一场雨</h3>
+          <p>下雨天不打伞，拉着你在雨里奔跑，然后回家一起喝一杯热可可，听雨声聊到天亮。</p>
+        </div>
+      </div>
+      <div class="moment visible">
+        <div class="moment-icon">📸</div>
+        <div class="moment-content">
+          <h3>一起拍很多照片</h3>
+          <p>记录下我们在一起的每一个瞬间，等老了翻出来看，每一张都是最珍贵的回忆。</p>
+        </div>
+      </div>
+      <div class="moment visible">
+        <div class="moment-icon">🌙</div>
+        <div class="moment-content">
+          <h3>一起数星星</h3>
+          <p>在某个夏天的夜晚，躺在草地上仰望星空，你指着星星许愿，而我的愿望就是你。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMISES -->
+  <section class="section">
+    <div class="section-title reveal visible">
+      <h2>🤞 我的承诺</h2>
+      <div class="line"></div>
+    </div>
+    <div class="promises">
+      <div class="promise-card reveal visible">
+        <span class="icon">🛡️</span>
+        <h3>永远保护你</h3>
+        <p>做你最坚实的后盾，不让任何风雨淋到你</p>
+      </div>
+      <div class="promise-card reveal visible">
+        <span class="icon">👂</span>
+        <h3>永远倾听你</h3>
+        <p>你的每一句话，我都认真听，认真记在心里</p>
+      </div>
+      <div class="promise-card reveal visible">
+        <span class="icon">😊</span>
+        <h3>永远逗你笑</h3>
+        <p>用尽全力让你每天都开开心心，笑容满面</p>
+      </div>
+      <div class="promise-card reveal visible">
+        <span class="icon">🤝</span>
+        <h3>永远陪伴你</h3>
+        <p>不管顺境逆境，我都在你身边，不离不弃</p>
+      </div>
+      <div class="promise-card reveal visible">
+        <span class="icon">🌹</span>
+        <h3>永远浪漫你</h3>
+        <p>生活需要仪式感，我会把每一天都过成纪念日</p>
+      </div>
+      <div class="promise-card reveal visible">
+        <span class="icon">💪</span>
+        <h3>永远努力</h3>
+        <p>成为更好的自己，配得上更好的你</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="final" id="finalSection">
+    <h2 class="reveal visible">杨慧敏<br><span class="heart-text">❤️</span> 做我女朋友好吗？</h2>
+    <p class="reveal visible">余生很长，我想牵着你的手，一步一步走下去</p>
+    <button class="yes-btn reveal visible" id="yesBtn" onclick="sayYes()">我 愿 意</button>
+    <div class="yes-response show" id="yesResponse">
+      🎉 太好了！从今天起，全世界最幸福的人就是我！💕
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="text-align:center;padding:40px 20px 60px;opacity:.3;font-size:12px;letter-spacing:2px">
+    Made with 💗 February 2025
+  </footer>
+
+</div>
+
+<script>
+// ===== HEART PARTICLE CANVAS =====
+(function(){
+  const c=document.getElementById('heartCanvas'),ctx=c.getContext('2d');
+  let w,h;
+  function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+  addEventListener('resize',resize);resize();
+
+  const particles=[];
+  const COUNT=120;
+
+  class Particle{
+    constructor(){this.reset()}
+    reset(){
+      this.x=Math.random()*w;this.y=Math.random()*h;
+      this.size=Math.random()*2+.5;
+      this.speedY=Math.random()*.3+.05;
+      this.speedX=Math.random()*.2-.1;
+      this.opacity=Math.random()*.4+.1;
+      this.pulse=Math.random()*Math.PI*2;
+      this.pulseSpeed=Math.random()*.02+.005;
+      // Color: pink to purple
+      const t=Math.random();
+      this.r=Math.floor(200+55*t);
+      this.g=Math.floor(80+25*(1-t));
+      this.b=Math.floor(157+35*t);
+    }
+    update(){
+      this.pulse+=this.pulseSpeed;
+      this.y-=this.speedY;
+      this.x+=this.speedX+Math.sin(this.pulse)*.15;
+      if(this.y<-10){this.y=h+10;this.x=Math.random()*w}
+    }
+    draw(){
+      const a=this.opacity+Math.sin(this.pulse)*.15;
+      ctx.fillStyle=`rgba(${this.r},${this.g},${this.b},${Math.max(0,a)})`;
+      ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();
+      if(this.size>1.5){
+        ctx.fillStyle=`rgba(${this.r},${this.g},${this.b},${a*.15})`;
+        ctx.beginPath();ctx.arc(this.x,this.y,this.size*3,0,Math.PI*2);ctx.fill();
+      }
+    }
+  }
+  for(let i=0;i<COUNT;i++)particles.push(new Particle());
+
+  function animate(){
+    ctx.clearRect(0,0,w,h);
+    // Nebula
+    [{x:.2,y:.4,r:300,c:'rgba(255,105,157,.015)'},{x:.8,y:.3,r:280,c:'rgba(200,80,192,.012)'},{x:.5,y:.7,r:320,c:'rgba(123,97,255,.01)'}].forEach(n=>{
+      const g=ctx.createRadialGradient(n.x*w,n.y*h,0,n.x*w,n.y*h,n.r);
+      g.addColorStop(0,n.c);g.addColorStop(1,'transparent');
+      ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    });
+    particles.forEach(p=>{p.update();p.draw()});
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ===== FLOATING HEARTS =====
+(function(){
+  const container=document.getElementById('floatingHearts');
+  const hearts=['💕','💗','💖','💘','❤️','🩷','🤍','✨','🌸'];
+  function spawn(){
+    const el=document.createElement('span');
+    el.className='float-heart';
+    el.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+    el.style.left=Math.random()*100+'%';
+    el.style.fontSize=(Math.random()*16+12)+'px';
+    el.style.animationDuration=(Math.random()*6+6)+'s';
+    el.style.animationDelay=Math.random()*2+'s';
+    container.appendChild(el);
+    setTimeout(()=>el.remove(),14000);
+  }
+  setInterval(spawn,800);
+})();
+
+// ===== FIREWORK CANVAS =====
+const fwCanvas=document.getElementById('fireworkCanvas');
+const fwCtx=fwCanvas.getContext('2d');
+let fwW,fwH;
+function fwResize(){fwW=fwCanvas.width=innerWidth;fwH=fwCanvas.height=innerHeight}
+addEventListener('resize',fwResize);fwResize();
+const fireworks=[];
+const fwParticles=[];
+
+class Firework{
+  constructor(x,y){
+    this.x=x;this.y=fwH;this.targetY=y;
+    this.speed=Math.random()*4+6;this.opacity=1;this.done=false;
+    this.hue=Math.random()*60+320; // pink range
+  }
+  update(){
+    this.y-=this.speed;
+    if(this.y<=this.targetY){this.done=true;this.explode()}
+  }
+  explode(){
+    const count=Math.floor(Math.random()*30)+40;
+    for(let i=0;i<count;i++){
+      const angle=Math.PI*2*i/count;
+      const speed=Math.random()*4+2;
+      fwParticles.push({
+        x:this.x,y:this.y,
+        vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,
+        life:1,decay:Math.random()*.015+.01,
+        size:Math.random()*2+1,
+        hue:this.hue+Math.random()*40-20
+      });
+    }
+  }
+  draw(){
+    fwCtx.beginPath();fwCtx.arc(this.x,this.y,2,0,Math.PI*2);
+    fwCtx.fillStyle=`hsla(${this.hue},100%,70%,${this.opacity})`;fwCtx.fill();
+  }
+}
+
+let fwActive=false;
+function launchFireworks(){
+  fwActive=true;
+  let count=0;
+  const iv=setInterval(()=>{
+    fireworks.push(new Firework(Math.random()*fwW*.8+fwW*.1,Math.random()*fwH*.4+50));
+    count++;
+    if(count>15)clearInterval(iv);
+  },300);
+  setTimeout(()=>{fwActive=false},8000);
+}
+
+function animateFW(){
+  fwCtx.clearRect(0,0,fwW,fwH);
+  fireworks.forEach((f,i)=>{if(!f.done){f.update();f.draw()}else{fireworks.splice(i,1)}});
+  for(let i=fwParticles.length-1;i>=0;i--){
+    const p=fwParticles[i];
+    p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.life-=p.decay;
+    if(p.life<=0){fwParticles.splice(i,1);continue}
+    fwCtx.beginPath();fwCtx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);
+    fwCtx.fillStyle=`hsla(${p.hue},100%,70%,${p.life})`;fwCtx.fill();
+  }
+  requestAnimationFrame(animateFW);
+}
+animateFW();
+
+// ===== INTRO =====
+document.getElementById('introOverlay').addEventListener('click',function(){
+  this.classList.add('hidden');
+  const page=document.getElementById('mainPage');
+  page.classList.add('show');
+  document.getElementById('heroTitle').classList.add('animate');
+  document.getElementById('heroSubtitle').classList.add('animate');
+});
+
+// ===== SCROLL REVEAL =====
+(function(){
+  const els=document.querySelectorAll('.reveal,.moment');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('visible'),i*100);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.1});
+  els.forEach(el=>obs.observe(el));
+})();
+
+// ===== YES BUTTON =====
+function sayYes(){
+  document.getElementById('yesResponse').classList.add('show');
+  launchFireworks();
+  // Extra hearts burst
+  const c=document.getElementById('floatingHearts');
+  for(let i=0;i<30;i++){
+    setTimeout(()=>{
+      const el=document.createElement('span');
+      el.className='float-heart';
+      el.textContent=['💕','💗','💖','🎉','✨','🥰'][Math.floor(Math.random()*6)];
+      el.style.left=Math.random()*100+'%';
+      el.style.fontSize=(Math.random()*20+16)+'px';
+      el.style.animationDuration=(Math.random()*4+4)+'s';
+      c.appendChild(el);
+      setTimeout(()=>el.remove(),10000);
+    },i*100);
+  }
+}
+
+// ===== MUSIC (optional placeholder) =====
+const musicBtn=document.getElementById('musicBtn');
+let musicPlaying=false;
+musicBtn.addEventListener('click',()=>{
+  musicPlaying=!musicPlaying;
+  musicBtn.classList.toggle('playing',musicPlaying);
+  musicBtn.textContent=musicPlaying?'🎶':'🎵';
+});
+</script>
+
+
+</body></html>
